@@ -33,7 +33,7 @@ function UrbanEars() {
     });
 
     // Create wavesurfer (audio visualization component)
-    var height = 128;
+    var height = 512;
     this.wavesurfer = Object.create(WaveSurfer);
     this.wavesurfer.init({
         container: '.audio_visual',
@@ -42,8 +42,11 @@ function UrbanEars() {
         // For the spectrogram the height is half the number of fftSamples
         fftSamples: height * 2,
         height: height,
-        colorMap: spectrogramColorMap
+        colorMap: spectrogramColorMap,
+        renderer: 'NoFillCanvas',
+        normalize: true
     });
+
 
     // Create labels (labels that appear above each region)
     var labels = Object.create(WaveSurfer.Labels);
@@ -86,7 +89,7 @@ UrbanEars.prototype = {
         // Update vertical progress bar to the currentTime when the sound clip is 
         // finished or paused since it is only updated on audioprocess
         this.wavesurfer.on('pause', updateProgressBar);
-        this.wavesurfer.on('finish', updateProgressBar);    
+        this.wavesurfer.on('finish', updateProgressBar); 
 
         // When a new sound file is loaded into the wavesurfer update the  play bar, update the 
         // annotation stages back to stage 1, update when the user started the task, update the workflow buttons.
@@ -234,6 +237,7 @@ UrbanEars.prototype = {
 function main() {
     // Create all the components
     var urbanEars = new UrbanEars();
+    window.urbanEars = urbanEars;
     // Load the first audio annotation task
     urbanEars.loadNextTask();
 }

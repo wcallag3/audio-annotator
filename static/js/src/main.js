@@ -48,12 +48,6 @@ function UrbanEars() {
         normalize: true
     });
 
-    this.timeline = Object.create(WaveSurfer.Timeline);
-    this.timeline.init({
-        wavesurfer: this.wavesurfer,
-        container: '.timeline'
-    });
-
     // Create labels (labels that appear above each region)
     var labels = Object.create(WaveSurfer.Labels);
     labels.init({
@@ -243,7 +237,7 @@ UrbanEars.prototype = {
 function main() {
     // Create all the components
     var urbanEars = new UrbanEars();
-    //window.urbanEars = urbanEars;
+    window.urbanEars = urbanEars;
     // Load the first audio annotation task
     urbanEars.loadNextTask();
 }

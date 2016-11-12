@@ -1,0 +1,18 @@
+FEATURES:
+
+1) Timeline
+	a) Timeline ticks change dynamically with zoom.
+2) Zoom In/Out
+3) Forward/Reverse
+	a) By secondary ticks
+	b) By windows
+	c) Should have appropriate keyboard shortcuts.
+4) Annotation edits
+	a) Click an existing annotation and resize.
+
+5) Global tag for sound file.
+
+BUGS:
+- Can't continue a annotation off the window. Window should scroll with annotation.
+- Timeline loading bug (crashes browser)
+- Waveform drawer (fix reflection issue)

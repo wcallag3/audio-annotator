@@ -1,0 +1,10 @@
+{
+    "task": {
+        "feedback": "none",
+        "visualization": "waveform",
+        "proximityTag": [],
+        "annotationTag": ["S1","Systole","S2","Diastole"],
+        "annotationSolutionsUrl": "/static/json/A001.json",
+        "url": "/static/wav/A001.wav"
+    }
+}

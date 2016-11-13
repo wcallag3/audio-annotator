@@ -48,6 +48,7 @@ function UrbanEars() {
         normalize: true
     });
 
+
     // Create labels (labels that appear above each region)
     var labels = Object.create(WaveSurfer.Labels);
     labels.init({
@@ -102,6 +103,11 @@ UrbanEars.prototype = {
             if (my.currentTask.feedback === 'hiddenImage') {
                 my.hiddenImage.append(my.currentTask.imgUrl);
             }
+            my.timeline = Object.create(WaveSurfer.Timeline);
+            my.timeline.init({
+                wavesurfer: my.wavesurfer,
+                container: '.timeline'
+            });
         });
     },
 

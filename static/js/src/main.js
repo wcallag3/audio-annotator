@@ -111,7 +111,8 @@ UrbanEars.prototype = {
             my.timeline = Object.create(WaveSurfer.Timeline);
             my.timeline.init({
                 wavesurfer: my.wavesurfer,
-                container: '.timeline'
+                container: '.timeline',
+                primaryLabelInterval: 1
             });
 
             // Set default Zoom level

@@ -2,6 +2,7 @@
 .timeline,
 .play_bar,
 .labels,
+.zoom_bar,
 .submit_container,
 .annotation,
 .creation_stage_container,
@@ -52,6 +53,16 @@
 
 .play_audio.fa {
   font-size: 40px;
+}
+
+.zoom_bar {
+  margin: 0px auto;
+  position: relative;
+  text-align: right;
+}
+
+.zoom_button.fa {
+  font-size: 24px;
 }
 
 .creation_stage_container {

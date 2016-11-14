@@ -211,3 +211,77 @@ WorkflowBtns.prototype = {
         this.showExitBtn = showExitBtn;
     }
 };
+
+/*
+ * Purpose:
+ *   Used to zoom in and out as well as update the timeline.
+ * Dependencies:
+ *   jQuery, Font Awesome, Wavesurfer (lib/wavesurfer.min.js), urban-ears.css
+ */
+ function ZoomBar(wavesurfer) {
+    this.wavesurfer = wavesurfer;
+    // Dom element containing zoom elements
+    this.zoomDom = null;
+    // List of user actions (zoom-in, zoom-out) with timestamps of when the user took the action
+    this.events = [];
+ }
+
+ ZoomBar.prototype = {
+    
+    // Creates the Zoom buttons and appends eventhandlers for updating
+    // these elements.
+    create: function() {
+        var my= this;
+        //this.addWaveSurferEvents();
+
+        // Create the Zoom IN button
+        var zoomIn = $('<i>', {
+            class: 'zoom_button fa fa-search-plus',
+        });
+        zoomIn.click(function() {
+            var zoomLevel = my.wavesurfer.params.minPxPerSec;
+            my.trackEvent('click-' + 'zoom-in');
+            if (zoomLevel + 100 <= 900){
+                my.wavesurfer.zoom(my.wavesurfer.params.minPxPerSec + 100);
+            }
+        });
+
+        // Create the Zoom OUT button
+        var zoomOut = $('<i>', {
+            class: 'zoom_button fa fa-search-minus',
+            style: 'padding-right:1%'
+        });
+        zoomOut.click(function() {
+            var zoomLevel = my.wavesurfer.params.minPxPerSec;
+            my.trackEvent('click-' + 'zoom-out');
+            if (zoomLevel - 100 >= 0){
+                my.wavesurfer.zoom(my.wavesurfer.params.minPxPerSec - 100);
+            }
+        });
+
+        this.zoomDom = [zoomOut,zoomIn];
+    },
+
+    // Append the zoom buttons to the .zoom_bar container
+    update: function() {
+        $(this.zoomDom).detach();
+        $('.zoom_bar').append(this.zoomDom);
+        this.events = [];
+    },
+
+    // Used to track events related to zooming in and out
+    trackEvent:function(eventString) {
+        var eventData = {
+            event: eventString,
+            time: new Date().getTime()
+        };
+        this.events.push(eventData);
+    },
+
+    // Return the list of events representing the actions the user did related to playing and
+    // pausing the audio
+    getEvents: function() {
+        // Return shallow copy
+        return this.events.slice();
+    },
+ };

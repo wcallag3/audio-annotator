@@ -16,7 +16,7 @@
 function UrbanEars() {
     this.wavesurfer;
     this.playBar;
-    this.timeline;
+    this.zoomBar;
     this.stages;
     this.workflowBtns;
     this.currentTask;
@@ -45,7 +45,7 @@ function UrbanEars() {
         height: height,
         colorMap: spectrogramColorMap,
         renderer: 'NoFillCanvas',
-        normalize: true
+        normalize: true,
     });
 
 
@@ -64,6 +64,10 @@ function UrbanEars() {
     // Create the play button and time that appear below the wavesurfer
     this.playBar = new PlayBar(this.wavesurfer);
     this.playBar.create();
+
+    // Create the zoom bar that appear above the wavesurfer
+    this.zoomBar = new ZoomBar(this.wavesurfer);
+    this.zoomBar.create();
 
     // Create the annotation stages that appear below the wavesurfer. The stages contain tags 
     // the users use to label a region in the audio clip
@@ -97,6 +101,7 @@ UrbanEars.prototype = {
         // Also if the user is suppose to get hidden image feedback, append that component to the page
         this.wavesurfer.on('ready', function () {
             my.playBar.update();
+            my.zoomBar.update();
             my.stages.updateStage(1);
             my.updateTaskTime();
             my.workflowBtns.update();
@@ -108,6 +113,9 @@ UrbanEars.prototype = {
                 wavesurfer: my.wavesurfer,
                 container: '.timeline'
             });
+
+            // Set default Zoom level
+            my.wavesurfer.zoom(600);
         });
     },
 

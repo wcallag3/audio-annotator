@@ -252,9 +252,9 @@ WaveSurfer.Region = {
                 position: 'absolute',
                 left: '0px',
                 top: '0px',
-                width: '1%',
+                width: '4%',
                 maxWidth: '4px',
-                height: '100%'
+                height: '100%',
             };
             this.style(handleLeft, css);
             this.style(handleRight, css);

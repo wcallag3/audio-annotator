@@ -60,6 +60,7 @@ WaveSurfer.Regions = {
         var region;
 
         function eventDown(e) {
+            if (e.target.childElementCount > 0){return;}
             drag = true;
             if (typeof e.targetTouches !== 'undefined' && e.targetTouches.length === 1) {
                 e.clientX = e.targetTouches[0].clientX;

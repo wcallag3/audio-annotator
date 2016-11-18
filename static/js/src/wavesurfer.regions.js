@@ -297,6 +297,7 @@ WaveSurfer.Region = {
 
     /* Update element's position, width, color. */
     updateRender: function (pxPerSec) {
+        this.width = this.wavesurfer.drawer.wrapper.scrollWidth;
         var dur = this.wavesurfer.getDuration();
         var width;
         if (pxPerSec) {

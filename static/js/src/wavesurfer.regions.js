@@ -145,6 +145,7 @@ WaveSurfer.Region = {
         this.attributes = params.attributes || {};
         this.annotation = params.annotation || '';
         this.proximity = params.proximity || '';
+        this.confidence = params.confidence || '';
 
         this.maxLength = params.maxLength;
         this.minLength = params.minLength;
@@ -193,6 +194,9 @@ WaveSurfer.Region = {
         }
         if (null != params.proximity) {
             this.proximity = params.proximity;
+        }
+        if (null != params.confidence) {
+            this.confidence = params.confidence;
         }
 
         this.updateRender();

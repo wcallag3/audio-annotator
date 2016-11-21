@@ -91,6 +91,7 @@ function StageThreeView() {
     this.dom = null;
     this.editOptionsDom = null;
     this.colors = ['rgba(236,0,251,0.4)', 'rgba(39,117,243,0.4)', 'rgba(33,177,4,0.4)'];
+    this.annotationColors = null;
 }
 
 StageThreeView.prototype = {
@@ -114,11 +115,12 @@ StageThreeView.prototype = {
 
     // Replace the proximity and annotation elements with the new elements that contain the
     // tags in the proximityTags and annotationTags lists
-    updateTagContents: function(proximityTags, annotationTags) {
+    updateTagContents: function(proximityTags, annotationTags,confidenceTags) {
         $('.tag_container', this.dom).empty();
         var proximity = this.createProximityTags(proximityTags);
         var annotation = this.createAnnotationTags(annotationTags);
-        $('.tag_container', this.dom).append([annotation, proximity]);
+        var confidence = this.createConfidenceTags(confidenceTags);
+        $('.tag_container', this.dom).append([annotation, proximity, confidence]);
     },
 
     // Create proximity tag elements
@@ -169,19 +171,57 @@ StageThreeView.prototype = {
             class: 'annotation_tags'
         });
 
-        annotationTags.forEach(function (tagName) {
+        annotationTags.forEach(function (tagName,index) {
             var tag = $('<button>', {
                 class: 'annotation_tag btn',
                 text: tagName,
             });
             // When a proximity tag is clicked fire the 'change-tag' event with what annotation tag it is
             tag.click(function () {
-                $(my).trigger('change-tag', [{annotation: tagName}]);
+                if (my.annotationColors.length > 0){
+                    $(my).trigger('change-tag', [{annotation: tagName, color:my.annotationColors[index]}]);
+                }
+                else {
+                    $(my).trigger('change-tag', [{annotation: tagName}]);
+                }
             });
             annotationContainer.append(tag);
         });
 
         return annotation.append([annotationLabel, annotationContainer]);
+    },
+
+    createConfidenceTags: function(confidenceTags) {
+       if (confidenceTags.length === 0) { return; }
+        var my = this;
+
+        var confidence = $('<div>');
+        var confidenceLabel = $('<div>', {
+            class: 'stage_3_label',
+            text: 'Confidence:',
+        });
+
+        var confidenceContainer = $('<div>', {
+            class: 'confidence_tags'
+        });
+
+        confidenceTags.forEach(function (tagName, index) {
+            var tag = $('<button>', {
+                class: 'confidence_tag btn',
+                text: tagName,
+            });
+            // When a proximity tag is clicked fire the 'change-tag' event with what proximity it is and
+            // colour that proximity is associated with
+            tag.click(function () {
+                $(my).trigger(
+                    'change-tag', 
+                    [{confidence: tagName}]
+                );
+            });
+            confidenceContainer.append(tag);
+        });
+
+        return confidence.append([confidenceLabel, confidenceContainer]);
     },
 
     // Update stage 3 dom with the current regions data
@@ -203,6 +243,7 @@ StageThreeView.prototype = {
     updateSelectedTags: function(region) {
         $('.annotation_tag', this.dom).removeClass('selected');
         $('.proximity_tag', this.dom).removeClass('selected');
+        $('.confidence_tag', this.dom).removeClass('selected');
         $('.custom_tag input', this.dom).val('');
 
         if (region.annotation) {
@@ -222,6 +263,13 @@ StageThreeView.prototype = {
             });
             selectedTags.addClass('selected');
         }
+
+        if (region.confidence) {
+            var selectedTags = $('.confidence_tag', this.dom).filter(function () {
+                return this.innerHTML === region.confidence;
+            });
+            selectedTags.addClass('selected');
+        }
     }
 };
 
@@ -235,6 +283,7 @@ function AnnotationStages(wavesurfer, hiddenImage) {
     this.currentStage = 0;
     this.currentRegion = null;
     this.usingProximity = false;
+    this.usingConfidence = false;
     this.stageOneView = new StageOneView();
     this.stageTwoView = new StageTwoView();
     this.stageThreeView = new StageThreeView();
@@ -278,6 +327,9 @@ AnnotationStages.prototype = {
         if (this.usingProximity) {
             regionData.proximity = region.proximity;
         }
+        if (this.usingConfidence) {
+            regionData.confidence = region.confidence;
+        }
         return regionData;
     },
 
@@ -308,9 +360,14 @@ AnnotationStages.prototype = {
         if (this.wavesurfer.regions) {
             for (var region_id in this.wavesurfer.regions.list) {
                 var region = this.wavesurfer.regions.list[region_id];
-                if (region.annotation === '' || (this.usingProximity && region.proximity === '')) {
-                    if (this.usingProximity) {
-                        Message.notifyAlert('Make sure all your annotations have an annotation tag and a proximity tag!'); 
+                if (region.annotation === '' || (this.usingProximity && region.proximity === '') ||
+                    (this.usingConfidence && region.confidence === '')) {
+                    if (this.usingProximity && this.usingConfidence) {
+                        Message.notifyAlert('Make sure all your annotations have an annotation tag, proximity tag and confidence tag!'); 
+                    } else if (this.usingConfidence) {
+                        Message.notifyAlert('Make sure all your annotations have an annotation tag and confidence tag!');
+                    } else if (this.usingProximity) {
+                        Message.notifyAlert('Make sure all your annotations have an annotation tag and proximity tag!');
                     } else {
                         Message.notifyAlert('Make sure all your annotations have a tag!'); 
                     }
@@ -402,6 +459,7 @@ AnnotationStages.prototype = {
         this.currentStage = 0;
         this.currentRegion = null;
         this.usingProximity = false;
+        this.usingConfidence = false;
         this.annotationSolutions = [];
         this.city = '';
         this.previousF1Score = 0;
@@ -411,21 +469,23 @@ AnnotationStages.prototype = {
     },
 
     // Reset field values and update the proximity tags, annotation tages and annotation solutions
-    reset: function(proximityTags, annotationTags, solution) {
+    reset: function(proximityTags, annotationTags, confidenceTags, solution) {
         this.clear();
         // Update all Tags' Contents
-        this.updateContentsTags(proximityTags, annotationTags);
+        this.updateContentsTags(proximityTags, annotationTags,confidenceTags);
         this.usingProximity = proximityTags.length > 0;
+        this.usingConfidence = confidenceTags.length > 0;
         // Update solution set
         this.annotationSolutions = solution.annotations || [];
         this.city = solution.city || '';
     },
 
     // Update stage 3 dom with new proximity tags and annotation tags
-    updateContentsTags: function(proximityTags, annotationTags) {
+    updateContentsTags: function(proximityTags, annotationTags, confidenceTags) {
         this.stageThreeView.updateTagContents(
             proximityTags,
-            annotationTags
+            annotationTags,
+            confidenceTags
         );
     },
 
@@ -537,6 +597,7 @@ AnnotationStages.prototype = {
     updateRegion: function(event, data) {
         var annotationEventType = null;
         var proximityEventType = null;
+        var confidenceEventType = null;
 
         // Determine if the tags where added for the first time or just changed
         if (data.annotation && data.annotation !== this.currentRegion.annotation) {
@@ -544,6 +605,10 @@ AnnotationStages.prototype = {
         }
         if (data.proximity && data.proximity !== this.currentRegion.proximity) {
             proximityEventType = this.currentRegion.proximity ? 'change' : 'add';
+        }
+
+        if (data.confidence && data.confidence !== this.currentRegion.confidence) {
+            confidenceEventType = this.currentRegion.confidence ? 'change' : 'add';
         }
 
         // Update the current region with the tag data
@@ -566,9 +631,17 @@ AnnotationStages.prototype = {
                 this.currentRegion.proximity
             );
         }
+        if (confidenceEventType) {
+            this.trackEvent(
+                confidenceEventType + '-confidence-label',
+                this.currentRegion.id,
+                this.currentRegion.proximity
+            );
+        }
 
         // If the region has all its required tags, deselect the region and go back to stage 1
-        if (this.currentRegion.annotation && (!this.usingProximity || this.currentRegion.proximity)) {
+        if (this.currentRegion.annotation && (!this.usingProximity || this.currentRegion.proximity) &&
+            (!this.usingConfidence || this.currentRegion.confidence)) {
             this.updateStage(1);
         }
     },

@@ -3,7 +3,11 @@
         "feedback": "none",
         "visualization": "waveform",
         "proximityTag": [],
+        "confidenceTag": ["Low","Medium","High"],
         "annotationTag": ["S1","Systole","S2","Diastole"],
+        "annotationColors": ["rgba(255, 174, 174,0.5)","rgba(176,229,124,0.5)","rgba(86,186,236,0.5)","rgba(85,50,133,0.5)"],
+        "globalTag": ["Normal","Arrythmia"],
+        "globalConfidenceTag" : ["Low","Medium","High"],
         "annotationSolutionsUrl": "/static/json/A001.json",
         "url": "/static/wav/A001.wav"
     }

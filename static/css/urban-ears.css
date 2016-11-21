@@ -134,6 +134,7 @@
   color: gray;
 }
 
+.confidence_tags,
 .proximity_tags,
 .annotation_tags {
   display: inline-block;
@@ -142,6 +143,7 @@
   font-size: 14px;
 }
 
+.confidence_tag,
 .proximity_tag,
 .annotation_tag {
   margin: 0px 10px 10px 10px !important;
@@ -161,11 +163,14 @@
   background-color: #00B1B9;
 }
 
+.confidence_tag,
 .proximity_tag {
   background-color: #fff;
   color: #006079 !important;
 }
 
+.confidence_tag:hover,
+.confidence_tag.selected,
 .proximity_tag:hover,
 .proximity_tag.selected {
   color: #fff !important;

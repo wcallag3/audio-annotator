@@ -44,7 +44,7 @@ WaveSurfer.Labels = {
         }.bind(this));
 
         // Replace the label container with a empty one when the wavesurfer is redrawn
-        wavesurfer.on('redraw', this.render.bind(this));
+        //wavesurfer.on('redraw', this.rearrange.bind(this));
         // Destory the wrapper when the wavesurfer is destroyed
         wavesurfer.on('destroy', this.destroy.bind(this));
         // Add a label when a region is created
@@ -120,6 +120,9 @@ WaveSurfer.Labels = {
             this.labels[region.id].remove();
             delete this.labels[region.id];
         }).bind(this));
+
+        this.wavesurfer.un('zoom', this.rearrange.bind(this));
+        this.wavesurfer.on('zoom', this.rearrange.bind(this));
 
         return label;
     },

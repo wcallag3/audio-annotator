@@ -635,7 +635,7 @@ AnnotationStages.prototype = {
             this.trackEvent(
                 confidenceEventType + '-confidence-label',
                 this.currentRegion.id,
-                this.currentRegion.proximity
+                this.currentRegion.confidence
             );
         }
 

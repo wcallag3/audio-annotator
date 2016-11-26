@@ -72,8 +72,11 @@ function UrbanEars() {
     // Create the annotation stages that appear below the wavesurfer. The stages contain tags 
     // the users use to label a region in the audio clip
     this.stages = new AnnotationStages(this.wavesurfer, this.hiddenImage);
-
     this.stages.create();
+
+    // Global Tags
+    this.globalTags = new GlobalTags();
+    this.globalTags.create();
 
     // Create Workflow btns (submit and exit)
     this.workflowBtns = new WorkflowBtns();
@@ -103,6 +106,7 @@ UrbanEars.prototype = {
         this.wavesurfer.on('ready', function () {
             my.playBar.update();
             my.zoomBar.update();
+            my.globalTags.update();
             my.stages.updateStage(1);
             my.stages.stageThreeView.annotationColors = my.currentTask.annotationColors;
             my.updateTaskTime();
@@ -146,10 +150,17 @@ UrbanEars.prototype = {
             var proximityTags = my.currentTask.proximityTag;
             var annotationTags = my.currentTask.annotationTag;
             var confidenceTags = my.currentTask.confidenceTag;
+            var globalAnnotationTags = my.currentTask.globalTag;
+            var globalConfidenceTags = my.currentTask.globalConfidenceTag; 
             my.stages.reset(
                 proximityTags,
                 annotationTags,
                 confidenceTags,
+                annotationSolutions
+            );
+            my.globalTags.reset(
+                globalAnnotationTags,
+                globalConfidenceTags,
                 annotationSolutions
             );
 

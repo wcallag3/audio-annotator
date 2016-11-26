@@ -5,6 +5,7 @@
 .zoom_bar,
 .submit_container,
 .annotation,
+.global_stage_container,
 .creation_stage_container,
 .hidden_img {
   width: 95%;
@@ -71,6 +72,12 @@
   position: relative;
 }
 
+.global_stage_container {
+  text-align: center;
+  min-height: 100px;
+  position: relative;
+}
+
 .annotation .btn_stop,
 .annotation .btn_start {
   color: #fff !important;
@@ -118,22 +125,28 @@
   margin: 0px 8px;
 }
 
+.global_tag_container,
 .tag_container {
   text-align: left;
   margin-top: 25px;
 }
 
+.global_annotation_label,
+.global_confidence_label,
 .stage_3_label {
   min-width: 150px;
   display: inline-block;
 }
 
+.global_tag_message,
 .stage_3_message {
   text-align: center;
   font-style: italic;
   color: gray;
 }
 
+.global_annotation_tags,
+.global_confidence_tags,
 .confidence_tags,
 .proximity_tags,
 .annotation_tags {

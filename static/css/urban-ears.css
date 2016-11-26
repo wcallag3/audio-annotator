@@ -156,6 +156,8 @@
   font-size: 14px;
 }
 
+.global_annotation_tag,
+.global_confidence_tag,
 .confidence_tag,
 .proximity_tag,
 .annotation_tag {
@@ -176,6 +178,17 @@
   background-color: #00B1B9;
 }
 
+.global_annotation_tag {
+  background-color: #fff;
+  color: #00B1B9 !important;
+}
+
+.global_annotation_tag:hover,
+.global_annotation_tag.selected {
+  color: #fff !important;
+  background-color: #00B1B9;
+}
+
 .confidence_tag,
 .proximity_tag {
   background-color: #fff;
@@ -189,6 +202,19 @@
   color: #fff !important;
   background-color: #006079;
 }
+
+.global_confidence_tag {
+  background-color: #fff;
+  color: #006079 !important;
+}
+
+.global_confidence_tag:hover,
+.global_confidence_tag.selected {
+  color: #fff !important;
+  background-color: #006079;
+}
+
+
 .btn:focus {
   outline: none !important;
 }
@@ -203,6 +229,7 @@
 
 .submit_container {
   text-align: center;
+  margin-bottom: 1%;
 }
 
 .submit_container .btn,

@@ -51,18 +51,18 @@ GlobalTags.prototype = {
     },
 
     updateSelectedTags: function(event, data) {
-        $('.annotation_tag',this.dom).removeClass('selected');
-        $('.confidence_tag',this.dom).removeClass('selected');
 
         if (data.annotation){
-            var selectedTags = $('.annotation_tag', this.dom).filter(function(){
+            $('.global_annotation_tag',this.globalTagView.dom).removeClass('selected');
+            var selectedTags = $('.global_annotation_tag', this.globalTagView.dom).filter(function(){
                 return this.innerHTML === data.annotation;
             });
             selectedTags.addClass('selected');
         }
 
         if (data.confidence){
-            var selectedTags = $('.confidence_tag', this.dom).filter(function(){
+            $('.global_confidence_tag',this.globalTagView.dom).removeClass('selected');
+            var selectedTags = $('.global_confidence_tag', this.globalTagView.dom).filter(function(){
                 return this.innerHTML === data.confidence;
             });
             selectedTags.addClass('selected');
@@ -158,7 +158,7 @@ GlobalTagView.prototype = {
 
         annotationTags.forEach(function (tagName) {
             var tag = $('<button>', {
-                class: 'annotation_tag btn',
+                class: 'global_annotation_tag btn',
                 text: tagName,
             });
             // When a tag is clicked, fire the 'global-tag-change' event with what tag it is
@@ -187,7 +187,7 @@ GlobalTagView.prototype = {
 
         confidenceTags.forEach(function (tagName) {
             var tag = $('<button>', {
-                class: 'confidence_tag btn',
+                class: 'global_confidence_tag btn',
                 text: tagName,
             });
             // When a tag is clicked, fire the 'global-tag-change' event with what tag it is

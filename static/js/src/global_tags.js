@@ -43,10 +43,10 @@ GlobalTags.prototype = {
 
         // Track tag change / add events
         if (annotationEventType) {
-            this.trackEvent(annotationEventType + '-global-annotation-label');
+            this.trackEvent(annotationEventType + '-global-annotation-label', this.currentTag.annotation);
         }
         if (confidenceEventType) {
-            this.trackEvent(confidenceEventType + '-global-confidence-label');
+            this.trackEvent(confidenceEventType + '-global-confidence-label', this.currentTag.confidence);
         }
     },
 
@@ -102,13 +102,26 @@ GlobalTags.prototype = {
     },
 
     // Adds event tracking object to events list
-    trackEvent: function(eventString) {
+    trackEvent: function(eventString, globalLabel) {
         var eventData = {
             event: eventString,
+            label: globalLabel,
             time: new Date().getTime()
         };
         this.events.push(eventData);
+    },
+
+    // Return an array of all the annotations the user has made for this clip
+    getAnnotations: function() {
+        return [this.currentTag]
+    },
+
+    // Return a list of actions the user took while annotating this clip
+    getEvents: function() {
+        // Return shallow copy
+        return this.events.slice();
     }
+
 };
 
 function GlobalTagView() {

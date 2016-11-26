@@ -216,6 +216,10 @@ UrbanEars.prototype = {
                 annotation_events: this.stages.getEvents(),
                 // List of actions the user took to play and pause the audio
                 play_events: this.playBar.getEvents(),
+                // Global annotation data
+                global_annotations: this.globalTags.getAnnotations(),
+                // Global annotation events
+                global_events: this.globalTags.getEvents(),
                 // Boolean, if at the end, the user was shown what city the clip was recorded in
                 final_solution_shown: this.stages.aboveThreshold()
             };

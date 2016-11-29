@@ -170,7 +170,6 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.NoFillCanvas, {
         [ this.waveCc, this.progressCc ].forEach(function (cc) {
             if (!cc) { return; }
 
-            console.log(peaks);
             cc.beginPath();
             cc.moveTo($, halfH + offsetY);
 

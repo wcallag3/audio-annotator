@@ -132,6 +132,7 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.NoFillCanvas, {
         }
 
         // Support arrays without negative peaks
+        /*
         var hasMinValues = [].some.call(peaks, function (val) { return val < 0; });
         if (!hasMinValues) {
             var reflectedPeaks = [];
@@ -140,7 +141,7 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.NoFillCanvas, {
                 reflectedPeaks[2 * i + 1] = -peaks[i];
             }
             peaks = reflectedPeaks;
-        }
+        }*/
 
         // A half-pixel offset makes lines crisp
         var $ = 0.5 / this.params.pixelRatio;
@@ -148,7 +149,7 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.NoFillCanvas, {
         var offsetY = height * channelIndex || 0;
         var halfH = height / 2;
         var length = ~~(peaks.length / 2);
-
+        
         var scale = 1;
         if (this.params.fillParent && this.width != length) {
             scale = this.width / length;
@@ -169,22 +170,24 @@ WaveSurfer.util.extend(WaveSurfer.Drawer.NoFillCanvas, {
         [ this.waveCc, this.progressCc ].forEach(function (cc) {
             if (!cc) { return; }
 
+            console.log(peaks);
             cc.beginPath();
             cc.moveTo($, halfH + offsetY);
 
             for (var i = 0; i < length; i++) {
-                var h = Math.round(peaks[2 * i] / absmax * halfH);
+                var peakPos = peaks[2*i];
+                var peakNeg = peaks[2*i+1];
+                if (peakPos == 0) {
+                    var value = peakNeg;
+                }
+                else {
+                    var value = peakPos;
+                }
+                //var h = Math.round(peaks[2*i] / absmax * halfH);
+                var h = Math.round(value / absmax * halfH);
                 cc.lineTo(i * scale + $, halfH - h + offsetY);
             }
 
-            // Draw the bottom edge going backwards, to make a single
-            // closed hull to fill.
-            for (var i = length - 1; i >= 0; i--) {
-                var h = Math.round(peaks[2 * i + 1] / absmax * halfH);
-                cc.lineTo(i * scale + $, halfH - h + offsetY);
-            }
-
-            cc.closePath();
             cc.stroke();
 
             // Always draw a median line

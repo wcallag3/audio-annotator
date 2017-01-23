@@ -2,6 +2,7 @@
     "task": {
         "feedback": "none",
         "visualization": "waveform",
+        "timeline": "True",
         "proximityTag": [],
         "confidenceTag": ["Low","Medium","High"],
         "annotationTag": ["S1","Systole","S2","Diastole"],

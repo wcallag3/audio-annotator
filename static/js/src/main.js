@@ -115,12 +115,14 @@ UrbanEars.prototype = {
                 my.hiddenImage.append(my.currentTask.imgUrl);
             }
             my.timeline = Object.create(WaveSurfer.Timeline);
-            my.timeline.init({
-                wavesurfer: my.wavesurfer,
-                container: '.timeline',
-                primaryLabelInterval: 1
-            });
-
+            if (my.currentTask.timeline === "True"){
+                my.timeline.init({
+                    wavesurfer: my.wavesurfer,
+                    container: '.timeline',
+                    primaryLabelInterval: 1
+                });
+            }
+            
             // Set default Zoom level
             my.wavesurfer.zoom(600);
         });

@@ -285,3 +285,137 @@ WorkflowBtns.prototype = {
         return this.events.slice();
     },
  };
+
+
+/*
+ * Purpose:
+ *   Used to change the amplitude of certain frequencies for better listening.
+ * Dependencies:
+ *   jQuery, Font Awesome, Wavesurfer (lib/wavesurfer.min.js), urban-ears.css
+ */
+ function Equalizer(wavesurfer) {
+    this.wavesurfer = wavesurfer;
+    // Dom element containing zoom elements
+    this.eqDom = [];
+    // List of user actions (changing freqs) with timestamps of when the user took the action
+    this.events = [];
+    // EQ Values
+    this.EQ = [
+        {
+          f: 32,
+          type: 'lowshelf'
+        },
+        {
+          f: 64,
+          type: 'peaking'
+        },
+        {
+          f: 125,
+          type: 'peaking'
+        },
+        {
+          f: 250,
+          type: 'peaking'
+        },
+        {
+          f: 500,
+          type: 'peaking'
+        },
+        {
+          f: 1000,
+          type: 'peaking'
+        },
+        {
+          f: 2000,
+          type: 'peaking'
+        },
+        {
+          f: 4000,
+          type: 'peaking'
+        },
+        {
+          f: 8000,
+          type: 'peaking'
+        },
+        {
+          f: 16000,
+          type: 'highshelf'
+        }
+    ];
+ }
+
+ Equalizer.prototype = {
+    
+    // Creates the filters, vertical range sliders,
+    // connects filters to wavesurfer and appends 
+    // eventhandlers for updating these elements.
+    create: function() {
+        var my= this;
+
+        // Create filters
+        var filters = this.EQ.map(function (band) {
+            var filter = my.wavesurfer.backend.ac.createBiquadFilter();
+            filter.type = band.type;
+            filter.gain.value = 0;
+            filter.Q.value = 1;
+            filter.frequency.value = band.f;
+            return filter;
+        });
+
+        // Connect filters to wavesurfer
+        my.wavesurfer.backend.setFilters(filters);
+
+        // Bind filters to vertical range sliders
+        var container = document.querySelector('.equalizer');
+        filters.forEach(function (filter) {
+            var input = document.createElement('input');
+            my.wavesurfer.util.extend(input, {
+                type: 'range',
+                min: -40,
+                max: 40,
+                value: 0,
+                title: filter.frequency.value
+            });
+            input.style.display = 'inline-block';
+            input.setAttribute('orient','vertical');
+            my.wavesurfer.drawer.style(input, {
+                '-moz-appearance': 'scale-vertical',
+                width: '50px',
+                height: '150px'
+            });
+            container.appendChild(input);
+
+            var onChange = function(e) {
+                filter.gain.value = ~~e.target.value;
+                //$("span[class^='thumb']").remove()
+            };
+
+            input.addEventListener('input',onChange);
+            input.addEventListener('change',onChange);
+        });
+
+    },
+
+    // Append the zoom buttons to the .zoom_bar container
+    update: function() {
+        $(this.eqDom).detach();
+        $('.zoom_bar').append(this.zoomDom);
+        this.events = [];
+    },
+
+    // Used to track events related to zooming in and out
+    trackEvent:function(eventString) {
+        var eventData = {
+            event: eventString,
+            time: new Date().getTime()
+        };
+        this.events.push(eventData);
+    },
+
+    // Return the list of events representing the actions the user did related to playing and
+    // pausing the audio
+    getEvents: function() {
+        // Return shallow copy
+        return this.events.slice();
+    },
+ };

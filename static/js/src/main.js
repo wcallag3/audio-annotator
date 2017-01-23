@@ -18,6 +18,7 @@ function UrbanEars() {
     this.playBar;
     this.zoomBar;
     this.stages;
+    this.equalizer;
     this.workflowBtns;
     this.currentTask;
     this.taskStartTime;
@@ -68,6 +69,9 @@ function UrbanEars() {
     // Create the zoom bar that appear above the wavesurfer
     this.zoomBar = new ZoomBar(this.wavesurfer);
     this.zoomBar.create();
+
+    // Create equalizer
+    this.equalizer = new Equalizer(this.wavesurfer);
 
     // Create the annotation stages that appear below the wavesurfer. The stages contain tags 
     // the users use to label a region in the audio clip
@@ -125,6 +129,7 @@ UrbanEars.prototype = {
             
             // Set default Zoom level
             my.wavesurfer.zoom(600);
+            my.equalizer.create();
         });
     },
 

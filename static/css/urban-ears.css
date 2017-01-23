@@ -1,5 +1,6 @@
 .audio_visual,
 .timeline,
+.equalizer,
 .play_bar,
 .labels,
 .zoom_bar,
@@ -45,6 +46,11 @@
   margin: 0px auto;
   position: relative;
 }
+
+.equalizer input[type="range"] + .thumb{
+  display: none;
+}
+
 
 .timer {
   position: absolute;

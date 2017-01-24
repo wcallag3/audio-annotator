@@ -139,6 +139,13 @@
   background-color: #6E0027;
 }
 
+.time_segment {
+  position: absolute;
+  margin: 0 auto;
+  width: 95%;
+  bottom: 0;
+}
+
 .time_segment input {
   margin: 0px 8px;
   width: 90px !important;

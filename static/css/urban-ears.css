@@ -69,6 +69,12 @@
     height: 150px;
 }
 
+.equalizer {
+  float: inherit;
+  width: auto;
+  margin-top:20px;
+}
+
 .timer {
   position: absolute;
   right: 0px;

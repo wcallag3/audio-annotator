@@ -65,6 +65,9 @@
   display: none;
 }
 
+.equalizer input[type=range]::-moz-range-track {
+    height: 150px;
+}
 
 .timer {
   position: absolute;

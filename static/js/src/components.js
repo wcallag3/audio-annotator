@@ -379,8 +379,7 @@ WorkflowBtns.prototype = {
             input.style.display = 'inline-block';
             input.setAttribute('orient','vertical');
             my.wavesurfer.drawer.style(input, {
-                '-moz-appearance': 'scale-vertical',
-                width: '40px',
+                width: '35px',
                 height: '150px'
             });
             container.appendChild(input);

@@ -43,6 +43,18 @@
   position: relative;
 }
 
+.left_column {
+  float: left;
+  width: 50%;
+  min-height: 250px;
+}
+
+.right_column {
+  float: right;
+  width: 50%;
+  min-height: 250px;
+}
+
 .play_bar {
   margin: 0px auto;
   position: relative;
@@ -76,12 +88,13 @@
 .creation_message_container {
   text-align: center;
   position: relative;
+  min-height:70px;
 }
 
 .creation_stage_container {
   text-align: center;
   position: relative;
-  min-height: 80px;
+  min-height: 100px;
 }
 
 .global_stage_container {

@@ -380,7 +380,7 @@ WorkflowBtns.prototype = {
             input.setAttribute('orient','vertical');
             my.wavesurfer.drawer.style(input, {
                 '-moz-appearance': 'scale-vertical',
-                width: '50px',
+                width: '40px',
                 height: '150px'
             });
             container.appendChild(input);

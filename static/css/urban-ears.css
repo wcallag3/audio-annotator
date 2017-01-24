@@ -9,6 +9,7 @@
 .global_stage_container,
 .creation_message_container,
 .creation_stage_container,
+.column_wrapper,
 .hidden_img {
   width: 95%;
   margin: auto;
@@ -89,6 +90,11 @@
   text-align: center;
   position: relative;
   min-height:70px;
+}
+
+.creation_stage_container,
+.global_stage_container {
+  float: inherit;
 }
 
 .creation_stage_container {

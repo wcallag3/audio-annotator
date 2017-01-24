@@ -1,6 +1,6 @@
 {
     "task": {
-        "feedback": "none",
+        "feedback": "notify",
         "visualization": "waveform",
         "timeline": "True",
         "proximityTag": [],

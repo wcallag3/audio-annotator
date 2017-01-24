@@ -89,6 +89,7 @@ StageTwoView.prototype = {
  */
 function StageThreeView() {
     this.dom = null;
+    this.timeDom = null;
     this.editOptionsDom = null;
     this.colors = ['rgba(236,0,251,0.4)', 'rgba(39,117,243,0.4)', 'rgba(33,177,4,0.4)'];
     this.annotationColors = null;
@@ -99,6 +100,7 @@ StageThreeView.prototype = {
     create: function() {
         var my = this;
         var container = $('<div>');
+        var timeContainer = $('<div>');
 
         var message = $('<div>', {
             class: 'stage_3_message'
@@ -110,7 +112,8 @@ StageThreeView.prototype = {
             class: 'tag_container',
         });
         
-        this.dom = container.append([message, time, tagContainer]);
+        this.dom = container.append([tagContainer]);
+        this.timeDom = timeContainer.append([message,time])
     },
 
     // Replace the proximity and annotation elements with the new elements that contain the
@@ -233,9 +236,9 @@ StageThreeView.prototype = {
     // Update the start, end and duration elements to match the start, end and duration
     // of the selected region
     updateTime: function(region) {
-        $('.start', this.dom).val(Util.secondsToString(region.start));
-        $('.end', this.dom).val(Util.secondsToString(region.end));
-        $('.duration', this.dom).val(Util.secondsToString(region.end - region.start));
+        $('.start', this.timeDom).val(Util.secondsToString(region.start));
+        $('.end', this.timeDom).val(Util.secondsToString(region.end));
+        $('.duration', this.timeDom).val(Util.secondsToString(region.end - region.start));
     },
 
     // Update the elements of the proximity and annotation tags to highlight
@@ -408,28 +411,36 @@ AnnotationStages.prototype = {
         this.swapRegion(newStage, region);
 
         // Update the dom of which ever stage the user is switching to
-        var newContent = null;
+        var timeContent = null;
+        var tagContent = null;
         if (newStage === 1) {
             this.stageOneView.update(null, null, this.wavesurfer.isPlaying());
-            newContent = this.stageOneView.dom;
+            timeContent = this.stageOneView.dom;
         } else if (newStage === 2) {
             this.stageTwoView.update(region);
-            newContent = this.stageTwoView.dom;
+            timeContent = this.stageTwoView.dom;
         } else if (newStage === 3) {
             this.stageThreeView.update(region);
-            newContent = this.stageThreeView.dom;
+            timeContent = this.stageThreeView.timeDom;
+            tagContent = this.stageThreeView.dom;
         }
 
 
-        if (newContent) {
+        if (timeContent || tagContent) {
             // Update current stage
             this.currentStage = newStage;
 
             // Detach the previous stage dom and append the updated stage dom to the stage container
-            var container = $('.creation_stage_container');
-            container.fadeOut(10, function(){
-                container.children().detach();
-                container.append(newContent).fadeIn();
+            var timeContainer = $('.creation_message_container');
+            timeContainer.fadeOut(10, function(){
+                timeContainer.children().detach();
+                timeContainer.append(timeContent).fadeIn();
+            })
+
+            var tagContainer = $('.creation_stage_container');
+            tagContainer.fadeOut(10, function(){
+                tagContainer.children().detach();
+                tagContainer.append(tagContent).fadeIn();
             });
         }
         // Alert the user of a hint

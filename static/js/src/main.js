@@ -244,6 +244,25 @@ Annotator.prototype = {
         }
     },
 
+    loadSolutions: function() {
+        var my = this;
+        var annotations = null;
+        var region = null;
+        var solutionsUrl = null;
+        $.getJSON(this.currentTask.annotationSolutionsUrl)
+            .done(function(data) {
+                annotations = data['annotations'];
+                for (var index=0; index < annotations.length; index++){
+                    region = my.wavesurfer.addRegion(annotations[index])
+                    my.stages.createRegionSwitchToStageThree(region)
+                }
+                my.stages.updateRegion('load-solutions',my)
+            })
+            .fail(function() {
+                alert('Error: Unable to retrieve annotation solution set');
+            });
+    },
+
     // Make POST request, passing back the content data. On success load in the next task
     post: function (content) {
         var my = this;

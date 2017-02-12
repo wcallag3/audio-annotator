@@ -25,6 +25,7 @@ function Annotator() {
     this.instructionsViewed = false;
     // Boolean, true if currently sending http post request 
     this.sendingResponse = false;
+    this.solutionRegions = [];
 
     // Create color map for spectrogram
     var spectrogramColorMap = colormap({
@@ -254,6 +255,7 @@ Annotator.prototype = {
                 annotations = data['annotations'];
                 for (var index=0; index < annotations.length; index++){
                     region = my.wavesurfer.addRegion(annotations[index])
+                    my.solutionRegions.push(region);
                     my.stages.createRegionSwitchToStageThree(region)
                 }
                 my.stages.updateRegion('load-solutions',my)
@@ -261,6 +263,17 @@ Annotator.prototype = {
             .fail(function() {
                 alert('Error: Unable to retrieve annotation solution set');
             });
+    },
+
+    clearSolutions: function() {
+        var my = this;
+        var currRegion = null;
+        for (var index=0; index < my.solutionRegions.length; index++) {
+            currRegion = my.solutionRegions[index];
+            currRegion.remove();
+            my.stages.deleteAnnotation(currRegion);
+        }
+        my.solutionRegions = [];
     },
 
     // Make POST request, passing back the content data. On success load in the next task
